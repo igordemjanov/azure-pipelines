@@ -1,0 +1,65 @@
+parameters:
+  name: ''
+  display_name: ''
+  pool: ''
+  project_title: ''
+  artifact_name: 'Drop'
+  depends_on: ''
+  
+jobs:
+
+- job: ${{ parameters.name }}
+  displayName: ${{ parameters.display_name }}
+  pool: ${{ parameters.pool }}
+  condition: succeeded()
+  continueOnError: false
+  dependsOn: ${{ parameters.depends_on }}
+  workspace:
+    clean: all
+
+  variables:
+    build_configuration: 'Release'
+
+  steps:
+
+  # Perform .Net Core Restore
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: '**/*.csproj'
+
+  # Perform .Net Core Build
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: '**/*.csproj'
+      arguments: '--configuration $(build_configuration)'
+  
+  # Perform .Net Core Test
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: '${{ parameters.project_title }}.Tests/*.csproj'
+      publishTestResults: true
+      arguments: '--configuration $(build_configuration) --settings $(System.DefaultWorkingDirectory)/${{ parameters.project_title }}.Tests/Environment.runsettings --collect "code coverage"'
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+
+  # Perform .Net Core Publish
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: '${{ parameters.project_title }}/${{ parameters.project_title }}.csproj'
+      arguments: '--configuration $(build_configuration) --output $(Pipeline.Workspace)'
+    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'))
+  
+  # Publish Pipeline artifacts
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Pipeline Artifact - ${{ parameters.artifact_name }}'
+    inputs:
+      targetPath: '$(Pipeline.Workspace)/${{ parameters.project_title }}.zip'
+      artifact: ${{ parameters.artifact_name }}
+    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'))

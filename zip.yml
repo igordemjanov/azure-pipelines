@@ -1,0 +1,34 @@
+parameters:
+  name: ''
+  display_name: ''
+  pool: ''
+  project_title: ''
+  artifact_name: 'Drop'
+  
+jobs:
+
+- job: ${{ parameters.name }}
+  displayName: ${{ parameters.display_name }}
+  pool: ${{ parameters.pool }}
+  condition: succeeded()
+  continueOnError: false
+  workspace:
+    clean: all
+
+  steps:
+
+  # Archive files
+  - task: ArchiveFiles@2
+    displayName: 'Package files'
+    inputs:
+      rootFolderOrFile: '${{ parameters.project_title }}'
+      archiveFile: '$(Pipeline.Workspace)/${{ parameters.project_title }}.zip'
+      includeRootFolder: false
+
+  # Publish Pipeline artifacts
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Pipeline Artifact - ${{ parameters.artifact_name }}'
+    inputs:
+      targetPath: '$(Pipeline.Workspace)/${{ parameters.project_title }}.zip'
+      artifact: ${{ parameters.artifact_name }}
+    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'))

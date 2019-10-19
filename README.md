@@ -4,6 +4,9 @@ This repository contains Build templates, often referred as 'Continuous Integrat
 
 ## Templates
 ### .NET Core Package
+#### Description
+This job template runs build, test and publish of .Net Core project based on the provided parameters.
+
 #### Tasks included
 - [.NET Core CLI (restore, build, test, publish)](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops)
 
@@ -19,6 +22,9 @@ This repository contains Build templates, often referred as 'Continuous Integrat
 | artifcat_name | Name of the artifact to publish as output of the build job |
 
 ## Zip Package
+#### Description
+This job template archives files based on the provided parameters.
+
 ### Tasks included
 - [Archive files](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/archive-files?view=azure-devops)
 - [Publish Pipeline Artifact](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-pipeline-artifact?view=azure-devops)

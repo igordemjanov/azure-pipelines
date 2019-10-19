@@ -19,7 +19,7 @@ This job template runs build, test and publish of .Net Core project based on the
 | display_name | Display name of the job |
 | pool | Name of the Agent (more info [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/pools-queues?view=azure-devops&tabs=yaml)) |
 | project_title | Title of the project |
-| artifcat_name | Name of the artifact to publish as output of the build job |
+| artifact_name | Name of the artifact to publish as output of the build job |
 
 ## Zip Package
 #### Description
@@ -36,4 +36,4 @@ This job template archives files based on the provided parameters.
 | display_name | Display name of the job |
 | pool | Name of the Agent (more info [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/pools-queues?view=azure-devops&tabs=yaml)) |
 | project_title | Title of the project |
-| artifcat_name | Name of the artifact to publish as output of the build job |
+| artifact_name | Name of the artifact to publish as output of the build job |

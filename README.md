@@ -5,11 +5,9 @@ This repository contains Build templates, often referred as 'Continuous Integrat
 ## Templates
 ### .NET Core Package
 #### Tasks included
-- Perform Restore
-- Perform Build
-- Perform Test
-- Publish Package
-- Publish Pipeline Artifact
+- [.NET Core CLI (restore, build, test, publish)](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops)
+
+- [Publish Pipeline Artifact](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-pipeline-artifact?view=azure-devops)
 
 #### Parameters
 | Parameter | Description |
@@ -22,8 +20,8 @@ This repository contains Build templates, often referred as 'Continuous Integrat
 
 ## Zip Package
 ### Tasks included
-- Archive files
-- Publish Pipeline Artifact
+- [Archive files](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/archive-files?view=azure-devops)
+- [Publish Pipeline Artifact](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-pipeline-artifact?view=azure-devops)
 
 ### Parameters
 | Parameter | Description |

@@ -10,7 +10,7 @@ jobs:
 - job: ${{ parameters.name }}
   displayName: ${{ parameters.display_name }}
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'ubuntu-latest'
   condition: succeeded()
   continueOnError: false
   dependsOn: ${{ parameters.depends_on }}

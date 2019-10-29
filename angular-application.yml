@@ -1,0 +1,90 @@
+parameters:
+  name: ''
+  display_name: ''
+  project_title: ''
+  artifact_name: 'Drop'
+  copy_web_config: 'false'
+
+jobs:
+
+- job: ${{ parameters.name }}
+  displayName: ${{ parameters.display_name }}
+  pool: 
+    vmImage: 'ubuntu-latest'
+  condition: succeeded()
+  continueOnError: false
+  workspace:
+    clean: all
+
+  steps:
+  
+  # Perform Install
+  - task: Npm@1
+    displayName: 'Install'
+    inputs:
+      command: custom
+      customCommand: 'ci'
+      workingDir: '$(System.DefaultWorkingDirectory)'
+      verbose: false
+
+  # Perform Lint
+  - task: Npm@1
+    displayName: 'Lint'
+    inputs:
+      command: custom
+      customCommand: 'run lint'
+      workingDir: '$(System.DefaultWorkingDirectory)'
+      verbose: false
+
+  # Perform Build
+  - task: Npm@1
+    displayName: 'Build'
+    inputs:
+      command: custom
+      customCommand: 'run build'
+      workingDir: '$(System.DefaultWorkingDirectory)'
+      verbose: false
+
+  # Archive files
+  - task: ArchiveFiles@2
+    displayName: 'Package files'
+    inputs:
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
+      archiveFile: '$(Pipeline.Workspace)/${{ parameters.project_title }}.zip'
+      includeRootFolder: false
+
+  # Perform Test
+  - task: Npm@1
+    displayName: 'Test'
+    inputs:
+      command: 'custom'
+      customCommand: 'run test'
+      workingDir: '$(System.DefaultWorkingDirectory)'
+      verbose: false
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+
+  # Attach Test Report
+  - task: PublishTestResults@2
+    displayName: 'Report Tests'
+    inputs:
+      testRunner: NUnit
+      mergeTestResults: true
+      testResultsFiles: '**/results.xml'
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+
+  # Attach Coverage Report
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Report Tests Coverage'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '**/cobertura-coverage.xml'
+      reportDirectory: '$(System.DefaultWorkingDirectory)/coverage'
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))  
+
+  # Publish Pipeline artifacts
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish Pipeline Artifact - ${{ parameters.artifact_name }}'
+    inputs:
+      targetPath: '$(Pipeline.Workspace)/${{ parameters.project_title }}.zip'
+      artifact: ${{ parameters.artifact_name }}
+    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'))

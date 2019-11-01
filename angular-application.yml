@@ -3,7 +3,6 @@ parameters:
   display_name: ''
   project_title: ''
   artifact_name: 'Drop'
-  copy_web_config: 'false'
 
 jobs:
 

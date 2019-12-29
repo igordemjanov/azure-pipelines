@@ -2,7 +2,7 @@ parameters:
   name: ''
   display_name: ''
   project_title: ''
-  artifact_name: 'Drop'
+  artifact_name: 'drop'
   depends_on: ''
   
 jobs:
@@ -22,6 +22,14 @@ jobs:
 
   steps:
 
+  # Use .Net Core Version 3.x
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '3.x'
+    displayName: 'Use .NET Core 3.x'
+    name: 'dotnet_version'
+    
   # .NET Core Restore
   - task: DotNetCoreCLI@2
     displayName: Restore

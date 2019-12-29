@@ -2,7 +2,7 @@ parameters:
   name: ''
   display_name: ''
   project_title: ''
-  artifact_name: 'Drop'
+  artifact_name: 'drop'
 
 jobs:
 

@@ -8,6 +8,7 @@ This repository contains Build templates, often referred as 'Continuous Integrat
 This job template runs build, test and publish of .NET Core application based on the provided parameters.
 
 #### Tasks included
+- [Use .NET Core (3.x)](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/dotnet-core-tool-installer?view=azure-devops)
 - [.NET Core CLI (restore, build, test, publish)](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops)
 - [Publish Pipeline Artifact](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-pipeline-artifact?view=azure-devops)
 
